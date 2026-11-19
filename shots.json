@@ -1,5 +1,1 @@
-[
-  { "name": "1-cover.jpg", "query": "?shot=cover&photo=pier&caption=Sunset%20Heist", "w": 1080, "h": 1080 },
-  { "name": "2-editor.jpg", "query": "?shot=editor&photo=boulevard&caption=Boulevard%20Queen", "w": 1280, "h": 720 },
-  { "name": "3-cover.jpg", "query": "?shot=cover&photo=boulevard&caption=Boulevard%20Queen", "w": 1080, "h": 1080 }
-]
+[{"h":720,"name":"1-cover.jpg","query":"?shot=cover&layout=duo&grade=sunset&size=1920x1080&photo=pier&photo2=boulevard&mode=each&title=Vice%20Heist&subtitle=A%20Vice%20City%20story&export=1","w":1280},{"h":720,"name":"2-editor.jpg","query":"?shot=editor&layout=triple&grade=neon&size=1080x1080&photo=boulevard&title=Boulevard%20Queen&subtitle=Ocean%20Drive%20after%20dark","w":1280},{"h":1280,"name":"3-cover.jpg","query":"?shot=cover&layout=hero&grade=neon&size=1080x1350&photo=pier&title=Neon%20Nights&subtitle=Drive%20fast%2C%20shine%20bright&export=1","w":1024},{"h":1024,"name":"4-cover.jpg","query":"?shot=cover&layout=quad&grade=ocean&size=1080x1080&photo=boulevard&photo2=pier&mode=each&title=Ocean%20Drive&subtitle=After%20dark%20on%20the%20strip&export=1","w":1024}]

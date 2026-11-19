@@ -3,20 +3,112 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cover Snap</title>
+<title>Vice Cover Lab — GTA-style cover art maker</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23ffd166'/%3E%3Cstop offset='1' stop-color='%23ff2e63'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='12' fill='url(%23g)'/%3E%3Ctext x='32' y='44' font-family='Arial Black, sans-serif' font-size='28' font-weight='900' text-anchor='middle' fill='%230d0221'%3EV%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="./style.css">
 </head>
 <body>
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark">VCL</span>
+    <div>
+      <h1>Vice Cover Lab</h1>
+      <p>Turn your photo into GTA-style cover art. Photos never leave your machine.</p>
+    </div>
+  </div>
+  <button id="surpriseBtn" type="button" class="ghost">🎲 Surprise me</button>
+</header>
 <main class="app">
-  <section class="controls">
-    <h1>Cover Snap</h1>
-    <p>A photo and a caption, made into a square cover.</p>
-    <label>Photo <input id="photo" type="file" accept="image/*"></label>
-    <label>Caption <input id="caption" type="text" maxlength="40" value="Sunset Heist"></label>
-    <button id="export" type="button">Export PNG 1080 x 1080</button>
-    <p id="status" role="status"></p>
+  <aside class="controls" aria-label="Cover controls">
+    <section>
+      <h2>1 · Photos</h2>
+      <div id="dropzone" class="dropzone" role="button" tabindex="0">
+        <strong>Drop photos here</strong>
+        <span>or click to browse — up to 3</span>
+        <input id="fileInput" type="file" accept="image/*" multiple hidden>
+      </div>
+      <div class="sample-row">
+        <span>Try a sample:</span>
+        <button type="button" data-sample="boulevard">Boulevard</button>
+        <button type="button" data-sample="pier">Pier</button>
+      </div>
+      <div id="photoSlots" class="slots"></div>
+      <div class="mode-row">
+        <label><input type="radio" name="mode" value="one" checked> One photo across all panels</label>
+        <label><input type="radio" name="mode" value="each"> Different photo per panel</label>
+      </div>
+    </section>
+    <section>
+      <h2>2 · Panels</h2>
+      <div id="panelTabs" class="tabs"></div>
+      <label>Photo in this panel
+        <select id="panelPhoto"></select>
+      </label>
+      <label>Zoom <span id="zoomVal" class="val">1.00×</span>
+        <input id="zoom" type="range" min="1" max="3" step="0.01" value="1">
+      </label>
+      <label>Pan left–right
+        <input id="panX" type="range" min="-1" max="1" step="0.01" value="0">
+      </label>
+      <label>Pan up–down
+        <input id="panY" type="range" min="-1" max="1" step="0.01" value="0">
+      </label>
+      <label>Fit
+        <select id="fitToggle">
+          <option value="fill">Fill the panel (crop)</option>
+          <option value="fit">Fit whole photo</option>
+        </select>
+      </label>
+      <p class="hint">Tip: drag the preview to pan a panel, scroll on it to zoom.</p>
+    </section>
+    <section>
+      <h2>3 · Layout &amp; grade</h2>
+      <div id="layoutBtns" class="btn-grid">
+        <button type="button" data-layout="hero">Hero</button>
+        <button type="button" data-layout="duo">Diagonal Duo</button>
+        <button type="button" data-layout="triple">Triple Strip</button>
+        <button type="button" data-layout="quad">Quad Grid</button>
+      </div>
+      <div id="gradeBtns" class="swatches">
+        <button type="button" data-grade="sunset" style="--sw1:#2b1055;--sw2:#ff7e2e" title="Vice Sunset">Sunset</button>
+        <button type="button" data-grade="neon" style="--sw1:#5b2ee5;--sw2:#ff2ea6" title="Neon Nights">Neon</button>
+        <button type="button" data-grade="ocean" style="--sw1:#0e7490;--sw2:#fbbf77" title="Ocean Drive">Ocean</button>
+        <button type="button" data-grade="noir" style="--sw1:#23202e;--sw2:#d4af37" title="Palm Noir">Noir</button>
+      </div>
+    </section>
+    <section>
+      <h2>4 · Caption</h2>
+      <label>Title
+        <input id="title" type="text" maxlength="40" value="Vice Heist">
+      </label>
+      <label>Subtitle
+        <input id="subtitle" type="text" maxlength="48" value="A Vice City story">
+      </label>
+      <label>Title size <span id="titleSizeVal" class="val">15%</span>
+        <input id="titleSize" type="range" min="0.08" max="0.24" step="0.005" value="0.15">
+      </label>
+      <div id="titleColors" class="color-row">
+        <button type="button" data-color="#ffffff" style="--c:#ffffff" title="White">White</button>
+        <button type="button" data-color="#ffd166" style="--c:#ffd166" title="Gold">Gold</button>
+        <button type="button" data-color="#ff2e63" style="--c:#ff2e63" title="Pink">Pink</button>
+        <button type="button" data-color="#00f0ff" style="--c:#00f0ff" title="Cyan">Cyan</button>
+      </div>
+      <label class="check"><input id="outline" type="checkbox" checked> Black outline on the title</label>
+    </section>
+    <section>
+      <h2>5 · Export</h2>
+      <div id="sizeBtns" class="btn-grid">
+        <button type="button" data-size="1080x1080">Square</button>
+        <button type="button" data-size="1080x1350">Portrait</button>
+        <button type="button" data-size="1920x1080">Landscape</button>
+      </div>
+      <button id="exportBtn" type="button" class="primary">⬇ Export PNG</button>
+      <p id="status" role="status"></p>
+    </section>
+  </aside>
+  <section class="stage">
+    <canvas id="cover" width="1920" height="1080" aria-label="The cover preview"></canvas>
   </section>
-  <canvas id="cover" width="1080" height="1080" aria-label="The cover"></canvas>
 </main>
 <script type="module" src="./src/main.js"></script>
 </body>
